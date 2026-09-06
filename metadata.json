@@ -1,0 +1,6 @@
+{
+  "name": "SÈVIS HT",
+  "description": "Mache sèvis lokal an Ayiti pou jwenn pwofesyonèl serye ak kalifye fasilman.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
