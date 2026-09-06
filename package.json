@@ -2,14 +2,26 @@
   "name": "sevis-ht",
   "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently \"cd backend && node src/server.js\" \"npx next dev --webpack\""
+    "dev": "concurrently \"cd backend && node src/server.js\" \"next dev --webpack\"",
+    "build": "next build",
+    "start": "next start"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "26.4.1",
     "@types/react": "19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "autoprefixer": "^10.5.5",
     "concurrently": "^8.2.2",
     "postcss": "^8.5.28",
-    "typescript": "^4.9.5"
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.41.0",
+    "next": "^16.3.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.6.0"
   }
 }
