@@ -1,39 +1,71 @@
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
-const { Client } = require('pg');
 require('dotenv').config();
 
-const authRoutes = require('./auth');
+const {
+  securityHeaders,
+  corsOptions,
+  generalLimiter
+} = require('./middleware/security.middleware');
+
+const authRoutes = require('./routes/auth.routes');
+const twoFactorRoutes = require('./routes/2fa.routes');
+const serviceRoutes = require('./routes/service.routes');
+const adminRoutes = require('./routes/admin.routes');
+const messagingRoutes = require('./routes/messaging.routes');
+const paymentRoutes = require('./routes/payment.routes');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-// Wout Otantifikasyon
-app.use('/api/auth', authRoutes);
+app.set('trust proxy', 1);
+app.use(securityHeaders);
+app.use(corsOptions);
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ limit: '1mb', extended: true }));
+app.use(generalLimiter);
 
-// Health check endpoint
-app.get('/api/health', async (req, res) => {
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+app.get('/api/health', (req, res) => {
+  return res.json({
+    status: 'OK',
+    message: 'SEVIS HT Backend sekirize ak Neon Database!',
+    timestamp: new Date().toISOString()
   });
-  try {
-    await client.connect();
-    const result = await client.query('SELECT NOW()');
-    res.json({
-      status: 'OK',
-      message: 'SÈVIS HT Backend sekirize ak Neon Database!',
-      time: result.rows[0].now
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  } finally {
-    await client.end();
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/2fa', twoFactorRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/messaging', messagingRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/uploads', express.static('uploads'));
+
+app.use((req, res) => {
+  return res.status(404).json({ error: 'Endpoint sa a pa egziste.' });
+});
+
+app.use((err, req, res, next) => {
+  console.error('Global error:', err);
+
+  if (err.message === 'CORS not allowed') {
+    return res.status(403).json({ error: 'CORS pa otorize.' });
   }
+
+  if (err instanceof SyntaxError) {
+    return res.status(400).json({ error: 'JSON pa valid.' });
+  }
+
+  return res.status(500).json({
+    error: 'Yon erè fèt sou sèvè a.',
+    timestamp: new Date().toISOString()
+  });
 });
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`🚀 Sèvè SÈVIS HT ap kouri sou pòt ${PORT}`);
+  console.log(`Sèvè SEVIS HT ap kouri sou pòt ${PORT}`);
+  console.log(`Sekirite: CORS, Helmet, Rate Limiting aktif`);
 });
+
+module.exports = app;
