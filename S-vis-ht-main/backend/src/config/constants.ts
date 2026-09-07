@@ -1,0 +1,65 @@
+export const PASSWORD_REQUIREMENTS = {
+  MIN_LENGTH: 12,
+  REQUIRE_UPPERCASE: true,
+  REQUIRE_LOWERCASE: true,
+  REQUIRE_NUMBERS: true,
+  REQUIRE_SPECIAL_CHARS: true,
+};
+
+export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+
+export const JWT_CONFIG = {
+  EXPIRATION: '7d',
+  REFRESH_EXPIRATION: '30d',
+};
+
+export const OTP_CONFIG = {
+  LENGTH: 6,
+  EXPIRATION_MINUTES: 10,
+  MAX_ATTEMPTS: 5,
+};
+
+export const PASSWORD_RESET_CONFIG = {
+  TOKEN_LENGTH: 32,
+  EXPIRATION_MINUTES: 30,
+};
+
+export const RATE_LIMITS = {
+  AUTH: { windowMs: 15 * 60 * 1000, max: 10 },
+  OTP: { windowMs: 10 * 60 * 1000, max: 5 },
+  SERVICE: { windowMs: 15 * 60 * 1000, max: 50 },
+  MESSAGE: { windowMs: 10 * 60 * 1000, max: 100 },
+  GENERAL: { windowMs: 15 * 60 * 1000, max: 100 },
+};
+
+export const ROLES = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  ADMIN: 'ADMIN',
+  MODERATOR: 'MODERATOR',
+  PROFESSIONAL: 'PROFESSIONAL',
+  CUSTOMER: 'CUSTOMER',
+};
+
+export const ACCOUNT_STATUS = {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  PENDING_VERIFICATION: 'PENDING_VERIFICATION',
+  DELETED: 'DELETED',
+};
+
+export const SERVICE_STATUS = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  DISPUTED: 'DISPUTED',
+};
+
+export const PAYMENT_STATUS = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED',
+};
